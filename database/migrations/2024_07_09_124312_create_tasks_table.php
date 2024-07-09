@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('tarefa');
             $table->date('data_termino');
-            $table->boolean('esta_concluido');
+            $table->string('status', 30);
             // Relacionamento (1, N)
-            $table->unsignedInteger('user_id'); //Autor
+            $table->unsignedBigInteger('user_id'); //Autor
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
@@ -28,6 +28,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropForeign(['user_id']); //Remove o relacionamento
+        });
         Schema::dropIfExists('tasks');
     }
 };
